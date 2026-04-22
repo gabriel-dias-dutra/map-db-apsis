@@ -1,0 +1,24 @@
+{
+  "version": "0.1.0",
+  "template": {
+    "version": "0.9.1",
+    "isSource": false,
+    "url": "git@github.com:SoftoDev/Softo-ProjectWrapper-ClaudeCode.git"
+  },
+  "languages": ["pt-BR"],
+  "repositories": [
+    {
+      "name": "sql",
+      "url": "git@github-softo.com:gabriel-dias-dutra/tool-sql-apsis.git"
+    }
+  ],
+  "pull": {
+    "strategy": "merge",
+    "autoStash": true
+  },
+  "implement": {
+    "autoCommit": true,
+    "autoPR": true,
+    "useWorktree": false
+  }
+}

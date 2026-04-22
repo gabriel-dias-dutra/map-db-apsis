@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SQL Server Schema Map for Database Search Agent — Project Plan</title>
+  <style>
+    :root {
+      --primary: #2563EB;
+      --primary-light: #EFF6FF;
+      --dark: #1E293B;
+      --gray: #64748B;
+      --light-gray: #F1F5F9;
+      --border: #E2E8F0;
+      --white: #FFFFFF;
+      --success: #16A34A;
+      --success-light: #F0FDF4;
+      --warning: #d97706;
+      --orange: #EA580C;
+      --orange-light: #FFF7ED;
+      --purple: #7C3AED;
+      --purple-light: #F5F3FF;
+      --radius: 12px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--dark);
+      background: var(--light-gray);
+      line-height: 1.7;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, #1d4ed8 100%);
+      color: white;
+      padding: 80px 40px;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .hero .date {
+      font-size: 0.85rem;
+      opacity: 0.6;
+      margin-top: 1rem;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    /* Sections */
+    section {
+      padding: 30px 0;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: var(--dark);
+      margin-bottom: 32px;
+      text-align: center;
+    }
+
+    h2 span {
+      color: var(--primary);
+    }
+
+    .intro-text {
+      text-align: center;
+      color: var(--gray);
+      font-size: 1.05rem;
+      max-width: 750px;
+      margin: -16px auto 40px;
+    }
+
+    .section-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 28px;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-card:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+
+    /* Feature cards (How it works) */
+    .features-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 28px;
+      border: 1px solid var(--border);
+      transition: box-shadow 0.2s;
+    }
+
+    .feature-card:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      margin-bottom: 14px;
+    }
+
+    .icon-blue { background: var(--primary-light); }
+    .icon-green { background: var(--success-light); }
+    .icon-orange { background: var(--orange-light); }
+    .icon-purple { background: var(--purple-light); }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+
+    /* Goals list */
+    .goals-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .goals-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .goals-list li svg {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      color: var(--success);
+      margin-top: 3px;
+    }
+
+    /* Milestones overview grid */
+    .phases-overview {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .phase-mini {
+      text-align: center;
+      padding: 20px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--white);
+      cursor: pointer;
+      text-decoration: none;
+      display: block;
+      width: 160px;
+      transition: box-shadow 0.2s;
+    }
+
+    .phase-mini:hover {
+      box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    }
+
+    .phase-mini.active {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .phase-mini .number {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gray);
+    }
+
+    .phase-mini.active .number {
+      color: var(--primary);
+    }
+
+    .phase-mini .label {
+      font-size: 0.75rem;
+      color: var(--gray);
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+
+    .section-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 24px 0;
+    }
+
+    /* Milestone timeline */
+    .timeline {
+      position: relative;
+      padding-left: 2rem;
+    }
+
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 11px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .phase {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+    .phase:last-child { margin-bottom: 0; }
+
+    .phase-dot {
+      position: absolute;
+      left: -2rem;
+      top: 2px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 700;
+      z-index: 1;
+    }
+
+    .phase-dot.mvp { background: var(--success); }
+
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .phase-header h3 {
+      font-size: 1.15rem;
+      color: var(--dark);
+    }
+
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 2px 8px;
+      border-radius: 9999px;
+    }
+
+    .badge-mvp {
+      background: var(--success-light);
+      color: var(--success);
+    }
+
+    .badge-phase {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+
+    .phase-description {
+      color: var(--gray);
+      margin-bottom: 0.75rem;
+    }
+
+    /* Tasks */
+    .task-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .task {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      padding: 0.5rem 0.75rem;
+      background: var(--light-gray);
+      border-radius: var(--radius);
+    }
+
+    .task svg {
+      flex-shrink: 0;
+      width: 16px;
+      height: 16px;
+      color: var(--primary);
+      margin-top: 7px;
+    }
+
+    .task-content { flex: 1; }
+
+    .task-title {
+      font-weight: 500;
+      color: var(--dark);
+    }
+
+    .task-tags {
+      display: flex;
+      gap: 0.25rem;
+      margin-top: 0.25rem;
+    }
+
+    .tag {
+      font-size: 0.65rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    /* Metrics table */
+    .metrics-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .metrics-table th {
+      text-align: left;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--gray);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 8px 12px;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .metrics-table td {
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.95rem;
+      color: var(--dark);
+    }
+
+    .metrics-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Future ideas list */
+    .ideas-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .ideas-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .ideas-list li svg {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      color: var(--primary);
+      margin-top: 3px;
+    }
+
+    .ideas-list li p {
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+
+    .ideas-list li strong {
+      color: var(--dark);
+    }
+
+    /* Notes list */
+    .notes-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .notes-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.5rem;
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+
+    .notes-list li svg {
+      flex-shrink: 0;
+      width: 18px;
+      height: 18px;
+      color: var(--warning);
+      margin-top: 3px;
+    }
+
+    .notes-list li strong {
+      color: var(--dark);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      color: var(--gray);
+      font-size: 0.85rem;
+      margin-top: 2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .container { padding: 1rem; }
+      .section-card { padding: 1rem 1.25rem; }
+      .features-grid { grid-template-columns: 1fr; }
+      .hero { padding: 50px 24px; }
+      .hero h1 { font-size: 2rem; }
+      h2 { font-size: 1.4rem; }
+    }
+
+    /* Print */
+    @media print {
+      body { background: white; }
+      .section-card { border: 1px solid var(--border); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-badge">Apsis · Database Search Agent</div>
+    <h1>SQL Server Schema Map for Database Search Agent</h1>
+    <p>Give the agent the structural knowledge it needs to turn business questions into correct SQL against a 202-table database.</p>
+    <p class="date">Created on 2026-04-22</p>
+  </div>
+
+  <div class="container">
+
+    <!-- OVERVIEW -->
+    <section>
+      <h2>Feature <span>overview</span></h2>
+      <p class="intro-text">What this feature delivers and why it matters.</p>
+      <div class="section-card">
+        <p>Apsis has a SQL Server database with around 202 tables. A database search agent running inside an n8n workflow is meant to answer business questions — "who is on the RH team?", "show me the laudos tied to Petrobras" — by translating each question into SQL, running it, and summarizing the result. Today the agent has the execution channel (an existing Lambda that runs arbitrary SQL from inside the database's VPC) but no structural knowledge of the data: it does not know which tables exist, what they mean, or how they relate. This feature produces the knowledge layer the agent is missing — a set of artifacts and a generation process that extract the database structure, translate it into human-readable business terms, and feed it to the agent so it can reason about what to query.</p>
+      </div>
+    </section>
+
+    <!-- GOALS -->
+    <section>
+      <h2>Feature <span>goals</span></h2>
+      <p class="intro-text">What the feature is aiming to achieve.</p>
+      <div class="section-card">
+        <ul class="goals-list">
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+            <span>Give the search agent a complete, trustworthy map of the Apsis database so it can build correct SQL against tables it has never seen before.</span>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+            <span>Keep the update process simple: on-demand regeneration by a Softo developer, no scheduled jobs, no new infrastructure in the first iteration.</span>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+            <span>Establish a validation baseline (a fixed set of real questions) so agent improvements can be measured objectively over time.</span>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5" /></svg>
+            <span>Avoid adding operational complexity (no vector store, no new services) until real usage proves they are needed.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS -->
+    <section>
+      <h2>How it <span>works</span></h2>
+      <p class="intro-text">The deliverables that make up the feature, in the order they come into play.</p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon icon-blue">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></svg>
+          </div>
+          <h3>Schema Extraction</h3>
+          <p>A script, run on demand by a Softo developer, connects to the existing SQL Lambda and runs <strong>introspection queries</strong> against the SQL Server catalogs to capture all tables, columns, data types, relationships and existing business descriptions.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon icon-green">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+          </div>
+          <h3>Database Map</h3>
+          <p>A Markdown document in Brazilian Portuguese that lists the 202 tables <strong>grouped by business domain</strong>, with one-line descriptions and the main relationships — loaded directly into the agent's system prompt.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon icon-orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </div>
+          <h3>Validation Question Battery</h3>
+          <p>Around 20 to 30 realistic questions drafted by Softo and validated by Apsis. The agent's hit rate on this battery becomes the <strong>baseline for measuring answer quality</strong> over time.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon icon-purple">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </div>
+          <h3>Operator Guide</h3>
+          <p>Short operational documentation covering how to <strong>run the extraction, review the map, and update</strong> the agent's system prompt in n8n — so anyone on the Softo team can refresh the map.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon icon-blue">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <h3>Table Fact Sheets</h3>
+          <p>One detailed sheet per table with columns, relationships, sample rows and example queries. The agent pulls a sheet by <strong>exact table name on demand</strong>, only when it needs more detail than the map provides.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon icon-green">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </div>
+          <h3>Table Lookup Mechanism</h3>
+          <p>A simple channel — either an additional endpoint on the existing Lambda or direct HTTP access to the files — so the agent can <strong>fetch a fact sheet by name</strong> in a single call.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon icon-orange">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EA580C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 7V5a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-2"/><path d="M14 17l5-5-5-5"/><line x1="19" y1="12" x2="9" y2="12"/></svg>
+          </div>
+          <h3>Agent Integration</h3>
+          <p>The n8n workflow is extended so the agent exposes the lookup as a tool, <strong>pulling fact sheets in runtime</strong> when the user's question requires table-level detail.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SUCCESS METRICS -->
+    <section>
+      <h2>Success <span>metrics</span></h2>
+      <p class="intro-text">How we will know this feature is working well.</p>
+      <div class="section-card">
+        <table class="metrics-table">
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Target</th>
+              <th>How to measure</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Map coverage</td>
+              <td>100% of base tables listed with name, domain and one-line description</td>
+              <td>Automated check: tables in <code>INFORMATION_SCHEMA.TABLES</code> vs. tables in the map</td>
+            </tr>
+            <tr>
+              <td>Agent answer quality</td>
+              <td>≥ 80% of battery questions answered correctly</td>
+              <td>Manual run of the validation battery; Softo scores, Apsis confirms</td>
+            </tr>
+            <tr>
+              <td>Agent response time</td>
+              <td>≤ 20 seconds per question</td>
+              <td>n8n execution logs</td>
+            </tr>
+            <tr>
+              <td>Regeneration effort</td>
+              <td>Under 30 minutes end-to-end by one developer</td>
+              <td>Timed by the developer during the first two runs</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- MILESTONE ROADMAP -->
+    <section>
+      <h2>Delivery <span>milestones</span></h2>
+      <p class="intro-text">How the feature rolls out across iterations.</p>
+
+      <div class="phases-overview">
+        <a href="#phase-1" class="phase-mini active">
+          <div class="number">1</div>
+          <div class="label">Database Map<br>(MVP)</div>
+        </a>
+        <a href="#phase-2" class="phase-mini">
+          <div class="number">2</div>
+          <div class="label">Table Fact Sheets</div>
+        </a>
+      </div>
+
+      <hr class="section-divider">
+
+      <div class="section-card">
+        <div class="timeline">
+
+          <div class="phase" id="phase-1">
+            <div class="phase-dot mvp">1</div>
+            <div class="phase-header">
+              <h3>Milestone 1 — Database Map</h3>
+              <span class="badge badge-mvp">MVP</span>
+            </div>
+            <p class="phase-description">Delivers the core knowledge layer: a generated, human-reviewable map of the database that can be pasted into the agent's prompt, plus a validation battery to measure whether the agent is actually answering well.</p>
+            <ul class="task-list">
+              <li class="task">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" /></svg>
+                <div class="task-content">
+                  <div class="task-title">Schema Extraction script</div>
+                  <div class="task-tags">
+                    <span class="tag">sql</span>
+                  </div>
+                </div>
+              </li>
+              <li class="task">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" /></svg>
+                <div class="task-content">
+                  <div class="task-title">Database Map generator</div>
+                  <div class="task-tags">
+                    <span class="tag">sql</span>
+                  </div>
+                </div>
+              </li>
+              <li class="task">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" /></svg>
+                <div class="task-content">
+                  <div class="task-title">Validation Question Battery</div>
+                  <div class="task-tags">
+                    <span class="tag">sql</span>
+                  </div>
+                </div>
+              </li>
+              <li class="task">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" /></svg>
+                <div class="task-content">
+                  <div class="task-title">Operator Guide</div>
+                  <div class="task-tags">
+                    <span class="tag">sql</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+          <div class="phase" id="phase-2">
+            <div class="phase-dot">2</div>
+            <div class="phase-header">
+              <h3>Milestone 2 — Table Fact Sheets</h3>
+              <span class="badge badge-phase">Milestone 2</span>
+            </div>
+            <p class="phase-description">Expands the knowledge layer so the agent can pull detail about specific tables on demand, improving answer quality on questions that require looking into particular columns, relationships or sample values.</p>
+            <ul class="task-list">
+              <li class="task">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" /></svg>
+                <div class="task-content">
+                  <div class="task-title">Table Fact Sheet generator</div>
+                  <div class="task-tags">
+                    <span class="tag">sql</span>
+                  </div>
+                </div>
+              </li>
+              <li class="task">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" /></svg>
+                <div class="task-content">
+                  <div class="task-title">Lookup mechanism</div>
+                  <div class="task-tags">
+                    <span class="tag">sql</span>
+                  </div>
+                </div>
+              </li>
+              <li class="task">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" /></svg>
+                <div class="task-content">
+                  <div class="task-title">n8n tool integration</div>
+                  <div class="task-tags">
+                    <span class="tag">n8n</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- FUTURE IDEAS -->
+    <section>
+      <h2>Future <span>ideas</span></h2>
+      <p class="intro-text">Ideas for later iterations, triggered by real usage.</p>
+      <div class="section-card">
+        <ul class="ideas-list">
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg>
+            <p><strong>Real-question corpus (Q&amp;A layer)</strong> — once the agent runs in production, collect real question → SQL pairs as a semantic retrieval layer that sharpens accuracy on recurring questions.</p>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg>
+            <p><strong>Semantic search backed by OpenSearch</strong> — when the Q&amp;A corpus grows beyond deterministic lookup, move it to the OpenSearch cluster already available in the stack.</p>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg>
+            <p><strong>Views and stored procedures</strong> — extend the extraction once their presence and relevance in the Apsis database are confirmed during use.</p>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg>
+            <p><strong>Automated regeneration</strong> — move from manual execution to a trigger (schema-change detection or cron) so the map is never silently stale.</p>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg>
+            <p><strong>Stale-map warning</strong> — embed a schema hash or timestamp in the map so the agent can flag when it may be older than the live database.</p>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg>
+            <p><strong>Cardinality annotations</strong> — add row counts and value distribution per table so the agent can choose smarter filtering strategies.</p>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18v-5.25m0 0a6.01 6.01 0 0 0 1.5-.189m-1.5.189a6.01 6.01 0 0 1-1.5-.189m3.75 7.478a12.06 12.06 0 0 1-4.5 0m3.75 2.383a14.406 14.406 0 0 1-3 0M14.25 18v-.192c0-.983.658-1.823 1.508-2.316a7.5 7.5 0 1 0-7.517 0c.85.493 1.509 1.333 1.509 2.316V18" /></svg>
+            <p><strong>Exploration side-effects</strong> — the first regeneration doubles as a discovery pass; whatever surfaces (views, PII, unusual conventions) may reshape the backlog.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- NOTES -->
+    <section>
+      <h2>Additional <span>notes</span></h2>
+      <p class="intro-text">Context, constraints and assumptions worth keeping visible.</p>
+      <div class="section-card">
+        <ul class="notes-list">
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>
+            <span><strong>Lambda reused on both sides:</strong> the existing Lambda in <code>repos/sql/</code> serves both the agent's runtime queries and the introspection queries from the extraction script — no new infrastructure for Milestone 1.</span>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>
+            <span><strong>Credentials in place:</strong> the Lambda's API credentials are already available to the project in <code>.env.tool</code>.</span>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>
+            <span><strong>5-second connection timeout:</strong> extraction queries must be split into small batches to stay under the Lambda's database connection timeout.</span>
+          </li>
+          <li>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" /></svg>
+            <span><strong>PII assumption:</strong> PII is assumed absent from the Apsis database. If exploration shows otherwise, the plan for sample data in Milestone 2 is revisited.</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      Generated by <a href="https://sof.to" target="_blank">Softo</a>
+    </div>
+
+  </div>
+  <script>
+    document.querySelectorAll('.phase-mini').forEach(function(el) {
+      el.addEventListener('click', function() {
+        document.querySelectorAll('.phase-mini').forEach(function(m) { m.classList.remove('active'); });
+        el.classList.add('active');
+      });
+    });
+
+    // Auto-color tags by content
+    (function() {
+      var palette = [
+        { bg: '#DBEAFE', color: '#1D4ED8' },
+        { bg: '#D1FAE5', color: '#047857' },
+        { bg: '#EDE9FE', color: '#6D28D9' },
+        { bg: '#FFF7ED', color: '#C2410C' },
+        { bg: '#FEF3C7', color: '#B45309' },
+        { bg: '#FCE7F3', color: '#BE185D' },
+        { bg: '#CCFBF1', color: '#0F766E' },
+        { bg: '#F1F5F9', color: '#475569' }
+      ];
+      var map = {};
+      var index = 0;
+      document.querySelectorAll('.tag').forEach(function(tag) {
+        var key = tag.textContent.trim().toLowerCase();
+        if (!map[key]) {
+          map[key] = palette[index % palette.length];
+          index++;
+        }
+        tag.style.background = map[key].bg;
+        tag.style.color = map[key].color;
+      });
+    })();
+  </script>
+</body>
+</html>
