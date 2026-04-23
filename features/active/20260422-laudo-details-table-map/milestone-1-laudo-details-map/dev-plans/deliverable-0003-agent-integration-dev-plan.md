@@ -132,15 +132,15 @@ The README is a single Markdown document at `repos/sql/README.md`, in Brazilian 
 
 ### Phase 1 — Create `repos/sql/README.md`
 
-- [ ] Create `repos/sql/README.md` with the full structure described in "README Structure" above, all in pt-BR.
-- [ ] Verify that every command string appears verbatim: `npm run laudo-details:introspect`, `npm run laudo-details:generate`, `./build.sh`.
-- [ ] Verify that every output path appears verbatim: `laudo-details/introspection.json`, `laudo-details/map.md`.
-- [ ] Verify that every marker string appears verbatim (including the spaces and the `-->`): `<!-- LAUDO-DETAILS:START -->` and `<!-- LAUDO-DETAILS:END -->`.
-- [ ] Verify that the five pilot questions appear verbatim as listed above.
-- [ ] Verify that the pass/partial/fail rubric appears verbatim as listed above.
-- [ ] Add the explicit note that `map.md` is generator output and must not be hand-edited.
-- [ ] Add the explicit note that pilot results live as a PR comment and that a committed battery is a future idea.
-- [ ] Run a local Markdown preview (IDE preview is enough — no CI step in this repo) and confirm headings, tables, and code blocks render correctly.
+- [x] Create `repos/sql/README.md` with the full structure described in "README Structure" above, all in pt-BR.
+- [x] Verify that every command string appears verbatim: `npm run laudo-details:introspect`, `npm run laudo-details:generate`, `./build.sh`.
+- [x] Verify that every output path appears verbatim: `laudo-details/introspection.json`, `laudo-details/map.md`.
+- [x] Verify that every marker string appears verbatim (including the spaces and the `-->`): `<!-- LAUDO-DETAILS:START -->` and `<!-- LAUDO-DETAILS:END -->`.
+- [x] Verify that the five pilot questions appear verbatim as listed above.
+- [x] Verify that the pass/partial/fail rubric appears verbatim as listed above.
+- [x] Add the explicit note that `map.md` is generator output and must not be hand-edited.
+- [x] Add the explicit note that pilot results live as a PR comment and that a committed battery is a future idea.
+- [x] Run a local Markdown preview (IDE preview is enough — no CI step in this repo) and confirm headings, tables, and code blocks render correctly.
 
 ### Phase 2 — Perform the n8n integration
 
