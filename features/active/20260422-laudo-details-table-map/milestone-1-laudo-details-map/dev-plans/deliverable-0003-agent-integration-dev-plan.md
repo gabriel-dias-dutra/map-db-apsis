@@ -173,8 +173,8 @@ The README is a single Markdown document at `repos/sql/README.md`, in Brazilian 
 
 ### Phase 4 — Commit and open the PR
 
-- [ ] Commit `repos/sql/README.md` with message `docs: add operator guide and LaudoDetails map integration section`.
-- [ ] Push the branch.
+- [x] Commit `repos/sql/README.md` with message `docs: add operator guide and LaudoDetails map integration section`.
+- [x] Push the branch. Deliverables 0001/0002/0003 consolidated on `feature/20260422-laudo-details-table-map/milestone-1-laudo-details-map` (intermediate per-deliverable branches deleted after consolidation).
 - [ ] Open the pull request. In the description, link to the feature overview, reference deliverables 0001 and 0002, and state that the n8n prompt was updated manually (pointing to the comment with the pilot results).
 - [ ] After the PR is merged, if any of the pilot questions failed, open a follow-up issue (or a Softo-internal task) describing the gap and pointing to which deliverable likely needs a change.
 
