@@ -366,12 +366,12 @@ Same identifier-quoting rules as Q9. `COUNT_BIG` avoids integer overflow on larg
 
 ### Phase 5 — Final check and documentation
 
-- [ ] Manual smoke test: run `npm run laudo-details:introspect` against the real database. Confirm:
-  - [ ] `introspection.json` appears at the expected path with all 19 columns.
-  - [ ] Re-run produces byte-identical output aside from `extractionTimestamp`.
-  - [ ] Simulate an invalid `API_KEY` (temporarily edit `.env.tool`) → script aborts with the pt-BR message and does not overwrite the file.
-  - [ ] Simulate a missing `.env.tool` → script aborts cleanly.
-- [ ] Verify `git diff` on the committed `introspection.json` is human-readable.
+- [x] Manual smoke test: run `npm run laudo-details:introspect` against the real database. Confirm:
+  - [x] `introspection.json` appears at the expected path with all 19 columns.
+  - [x] Re-run produces byte-identical output aside from `extractionTimestamp`.
+  - [x] Simulate an invalid `API_KEY` (temporarily edit `.env.tool`) → script aborts with the pt-BR message and does not overwrite the file.
+  - [x] Simulate a missing `.env.tool` → script aborts cleanly.
+- [x] Verify `git diff` on the committed `introspection.json` is human-readable.
 - [ ] This deliverable does **not** write README changes — that content belongs to Deliverable 0003.
 
 ## Files Affected (summary)

@@ -4,3 +4,4 @@ node_modules/
 .template-update/
 .env
 .env.*
+!.env.tool.example
