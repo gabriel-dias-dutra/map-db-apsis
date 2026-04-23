@@ -167,19 +167,19 @@ export interface GenerationSummary {
 
 ### Phase 1 — Wiring
 
-- [ ] Add `"laudo-details:generate"` to `repos/sql/package.json` `scripts`:
+- [x] Add `"laudo-details:generate"` to `repos/sql/package.json` `scripts`:
   ```
   "laudo-details:generate": "node --experimental-strip-types scripts/laudo-details/generate.ts"
   ```
   Note: this script does **not** need `--env-file` — the generator is offline and reads no environment variables.
-- [ ] Confirm the existing `repos/sql/tsconfig.json` from D0001 includes `scripts/**/*.ts` (it already does; no edit needed).
-- [ ] Confirm the directory `repos/sql/laudo-details/` exists (created in D0001 with a `.gitkeep`). If the generator writes `map.md`, the `.gitkeep` can remain or be removed in the same PR.
+- [x] Confirm the existing `repos/sql/tsconfig.json` from D0001 includes `scripts/**/*.ts` (it already does; no edit needed).
+- [x] Confirm the directory `repos/sql/laudo-details/` exists (created in D0001 with a `.gitkeep`). If the generator writes `map.md`, the `.gitkeep` can remain or be removed in the same PR.
 
 ### Phase 2 — Types and wording
 
-- [ ] Extend `repos/sql/scripts/laudo-details/types.ts` with the additions listed in "Types added to `types.ts`" above. Keep the existing types verbatim; append the new ones at the bottom of the file.
-- [ ] Create `repos/sql/scripts/laudo-details/wording.ts`. Exports three records plus re-exports used types from `types.ts`:
-  - [ ] `export const typeTraps: Record<string, TypeTrap>` — one entry per known text-stored numeric/date column in `LaudoDetails`. Initial list (columns drawn from the CREATE TABLE shared by the user):
+- [x] Extend `repos/sql/scripts/laudo-details/types.ts` with the additions listed in "Types added to `types.ts`" above. Keep the existing types verbatim; append the new ones at the bottom of the file.
+- [x] Create `repos/sql/scripts/laudo-details/wording.ts`. Exports three records plus re-exports used types from `types.ts`:
+  - [x] `export const typeTraps: Record<string, TypeTrap>` — one entry per known text-stored numeric/date column in `LaudoDetails`. Initial list (columns drawn from the CREATE TABLE shared by the user):
     ```typescript
     export const typeTraps: Record<string, TypeTrap> = {
       BaseDate:               { semanticType: "date",    observation: "texto em formato de data" },
@@ -196,7 +196,7 @@ export interface GenerationSummary {
     };
     ```
     `Id`, `ProposalId`, `SentDocumentId`, `ClientName`, `EvaluationObject`, `ReportObjective`, `Methodology`, `GICS` are intentionally **not** traps — they are genuinely text-shaped semantics.
-  - [ ] `export const columnDescriptions: Record<string, ColumnDescription>` — one entry per column in `LaudoDetails`. Columns whose business meaning is confidently known get `{ type: "described", text: "<pt-BR>" }`. Columns the author cannot describe confidently (financial domain specifics that Apsis will later review) get `{ type: "pending", reason: "<motivo curto>" }`. Initial authoring seed (implementer should refine wording during Phase 5 review):
+  - [x] `export const columnDescriptions: Record<string, ColumnDescription>` — one entry per column in `LaudoDetails`. Columns whose business meaning is confidently known get `{ type: "described", text: "<pt-BR>" }`. Columns the author cannot describe confidently (financial domain specifics that Apsis will later review) get `{ type: "pending", reason: "<motivo curto>" }`. Initial authoring seed (implementer should refine wording during Phase 5 review):
     ```typescript
     export const columnDescriptions: Record<string, ColumnDescription> = {
       Id:                       { type: "described", text: "Identificador único do laudo (UUID)." },
@@ -220,38 +220,38 @@ export interface GenerationSummary {
       LastHistoricalYear:       { type: "described", text: "Último ano com dado histórico considerado no laudo (armazenado como texto)." },
     };
     ```
-  - [ ] `export const neighborDescriptions: Record<string, string>` — one entry per neighbor likely to appear, keyed as `"<schema>.<table>"`. Initial seeds are best-effort; neighbors not in the map render with the pending marker. Seed at least: `"projects.Proposal"`, `"projects.SentDocument"`. Example:
+  - [x] `export const neighborDescriptions: Record<string, string>` — one entry per neighbor likely to appear, keyed as `"<schema>.<table>"`. Initial seeds are best-effort; neighbors not in the map render with the pending marker. Seed at least: `"projects.Proposal"`, `"projects.SentDocument"`. Example:
     ```typescript
     export const neighborDescriptions: Record<string, string> = {
       "projects.Proposal":     "Proposta comercial que precede o laudo.",
       "projects.SentDocument": "Documento enviado/arquivado ligado ao laudo.",
     };
     ```
-  - [ ] Any neighbor not present in the map is rendered as `_Descrição pendente — vizinho não autorado_`.
+  - [x] Any neighbor not present in the map is rendered as `_Descrição pendente — vizinho não autorado_`.
 
 ### Phase 3 — Per-section rendering modules
 
 Each module exports one pure function. Input is the already-loaded `Snapshot` (plus wording imports where needed); output is a string of Markdown with no leading/trailing blank lines (the composer handles separators).
 
-- [ ] `repos/sql/scripts/laudo-details/rendering/header.ts` — `renderHeader(snapshot: Snapshot, generatorVersion: string, neighborsCount: number): string`. Produces title, intro paragraph, and a Markdown "Metadados" table with the five rows (Snapshot version, Data, Linhas na tabela, Vizinhos mapeados, Versão do gerador).
-- [ ] `repos/sql/scripts/laudo-details/rendering/type-warnings.ts` — `renderTypeWarnings(snapshot: Snapshot): string`. Walks `snapshot.columns` in order, keeps those present in `typeTraps`, and renders them. Empty-state line when none.
-- [ ] `repos/sql/scripts/laudo-details/rendering/columns.ts` — `renderColumns(snapshot: Snapshot): string`. Renders every column row. Merges data from the snapshot with `columnDescriptions` (pending marker fallback), and the inline `⚠` flag when the column is in `typeTraps`. `Obrigatório` = `Sim` / `Não`, appending `(PK)` when `isPrimaryKey`.
-- [ ] `repos/sql/scripts/laudo-details/rendering/relationships.ts` — `renderRelationships(snapshot: Snapshot): string`. Renders `snapshot.foreignKeys` in snapshot order. Origin string mapping: `"catalog" → "FK do catálogo"`, `"inferred" → "inferido por nome"`, `"inferred-no-match" → "sem correspondência"`. When target is null, show `—`. Empty-state line when `foreignKeys.length === 0`.
-- [ ] `repos/sql/scripts/laudo-details/rendering/reverse-refs.ts` — `renderReverseRefs(snapshot: Snapshot): string`. Analogous to relationships, over `snapshot.reverseReferences`.
-- [ ] `repos/sql/scripts/laudo-details/rendering/value-match.ts` — `renderValueMatch(snapshot: Snapshot): string`. Intro paragraph + table of `valueMatchContextuals`. Computes presence per source column: if both present, shows both; if one missing, a callout line above the table says "Sem candidatos para `<missing column>`"; if both missing, renders only the single empty-state line.
-- [ ] `repos/sql/scripts/laudo-details/rendering/neighbors.ts` — `renderNeighbors(snapshot: Snapshot): string`. Bulleted list with abbreviated row counts. Helper `formatRowCount(n: number): string` handles the three-tier formatting described in the output contract.
-- [ ] `repos/sql/scripts/laudo-details/rendering/footer.ts` — `renderFooter(snapshot: Snapshot, generatorVersion: string): string`. Horizontal rule + italicized one-liner.
+- [x] `repos/sql/scripts/laudo-details/rendering/header.ts` — `renderHeader(snapshot: Snapshot, generatorVersion: string, neighborsCount: number): string`. Produces title, intro paragraph, and a Markdown "Metadados" table with the five rows (Snapshot version, Data, Linhas na tabela, Vizinhos mapeados, Versão do gerador).
+- [x] `repos/sql/scripts/laudo-details/rendering/type-warnings.ts` — `renderTypeWarnings(snapshot: Snapshot): string`. Walks `snapshot.columns` in order, keeps those present in `typeTraps`, and renders them. Empty-state line when none.
+- [x] `repos/sql/scripts/laudo-details/rendering/columns.ts` — `renderColumns(snapshot: Snapshot): string`. Renders every column row. Merges data from the snapshot with `columnDescriptions` (pending marker fallback), and the inline `⚠` flag when the column is in `typeTraps`. `Obrigatório` = `Sim` / `Não`, appending `(PK)` when `isPrimaryKey`.
+- [x] `repos/sql/scripts/laudo-details/rendering/relationships.ts` — `renderRelationships(snapshot: Snapshot): string`. Renders `snapshot.foreignKeys` in snapshot order. Origin string mapping: `"catalog" → "FK do catálogo"`, `"inferred" → "inferido por nome"`, `"inferred-no-match" → "sem correspondência"`. When target is null, show `—`. Empty-state line when `foreignKeys.length === 0`.
+- [x] `repos/sql/scripts/laudo-details/rendering/reverse-refs.ts` — `renderReverseRefs(snapshot: Snapshot): string`. Analogous to relationships, over `snapshot.reverseReferences`.
+- [x] `repos/sql/scripts/laudo-details/rendering/value-match.ts` — `renderValueMatch(snapshot: Snapshot): string`. Intro paragraph + table of `valueMatchContextuals`. Computes presence per source column: if both present, shows both; if one missing, a callout line above the table says "Sem candidatos para `<missing column>`"; if both missing, renders only the single empty-state line.
+- [x] `repos/sql/scripts/laudo-details/rendering/neighbors.ts` — `renderNeighbors(snapshot: Snapshot): string`. Bulleted list with abbreviated row counts. Helper `formatRowCount(n: number): string` handles the three-tier formatting described in the output contract.
+- [x] `repos/sql/scripts/laudo-details/rendering/footer.ts` — `renderFooter(snapshot: Snapshot, generatorVersion: string): string`. Horizontal rule + italicized one-liner.
 
 ### Phase 4 — Composer and entrypoint
 
-- [ ] Create `repos/sql/scripts/laudo-details/render.ts`:
-  - [ ] Export `function renderMap(snapshot: Snapshot, generatorVersion: string): string`.
-  - [ ] Calls each `render<Section>` in the order listed above, joins with `\n\n`, appends a single trailing `\n`.
-- [ ] Create `repos/sql/scripts/laudo-details/generate.ts`:
-  - [ ] `const GENERATOR_VERSION = "1.0.0"` near the top.
-  - [ ] `const SOFT_CHAR_LIMIT = 20_000` near the top.
-  - [ ] `const INPUT_PATH = "laudo-details/introspection.json"`, `const OUTPUT_PATH = "laudo-details/map.md"` (paths resolved from `process.cwd()` = `repos/sql/`).
-  - [ ] Entry-point flow:
+- [x] Create `repos/sql/scripts/laudo-details/render.ts`:
+  - [x] Export `function renderMap(snapshot: Snapshot, generatorVersion: string): string`.
+  - [x] Calls each `render<Section>` in the order listed above, joins with `\n\n`, appends a single trailing `\n`.
+- [x] Create `repos/sql/scripts/laudo-details/generate.ts`:
+  - [x] `const GENERATOR_VERSION = "1.0.0"` near the top.
+  - [x] `const SOFT_CHAR_LIMIT = 20_000` near the top.
+  - [x] `const INPUT_PATH = "laudo-details/introspection.json"`, `const OUTPUT_PATH = "laudo-details/map.md"` (paths resolved from `process.cwd()` = `repos/sql/`).
+  - [x] Entry-point flow:
     1. Check `INPUT_PATH` exists. If not, abort with `arquivo 'laudo-details/introspection.json' não encontrado — rode 'npm run laudo-details:introspect' primeiro.` (stderr, exit 1, preserve any existing `map.md`).
     2. Read and parse the JSON. On parse error: abort with a message naming the parse error line/column and preserve the current `map.md`.
     3. Validate `schemaVersion === SCHEMA_VERSION`. If mismatch: abort with `versão desconhecida do snapshot (<valor>) — verifique a versão do gerador.` Preserve `map.md`.
@@ -263,28 +263,28 @@ Each module exports one pure function. Input is the already-loaded `Snapshot` (p
     9. Compute and print a `GenerationSummary` — counts described here, plus `outputCharCount` (length of the rendered string) and `outputExceedsSoftLimit` boolean.
     10. If `outputExceedsSoftLimit`, print an extra line: `⚠ mapa excede ${SOFT_CHAR_LIMIT.toLocaleString("pt-BR")} caracteres (atual: ${outputCharCount.toLocaleString("pt-BR")})`.
     11. Exit 0 on success.
-  - [ ] All user-facing strings in pt-BR; internal error messages in English are fine for developer stack traces only.
+  - [x] All user-facing strings in pt-BR; internal error messages in English are fine for developer stack traces only.
 
 ### Phase 5 — Smoke test and wording pass
 
-- [ ] Run `npm run laudo-details:introspect` first (prerequisite — produces `laudo-details/introspection.json`).
-- [ ] Run `npm run laudo-details:generate` and open `laudo-details/map.md`.
-- [ ] Visually verify each section:
-  - [ ] Title matches `# Mapa da tabela [projects].[LaudoDetails]`.
-  - [ ] Metadados table is populated.
-  - [ ] "Avisos de tipo" section lists the 11 expected columns (see `typeTraps` above).
-  - [ ] Columns section shows 19 rows in `ordinalPosition` order, with descriptions from `wording.ts`.
-  - [ ] Relationships section has rows for `ProposalId` and `SentDocumentId` (origin depends on catalog presence).
-  - [ ] Reverse references section populated according to snapshot.
-  - [ ] Value-match table or empty-state rendered depending on snapshot content.
-  - [ ] Neighbor summaries show abbreviated row counts.
-  - [ ] Footer references `GENERATOR_VERSION` and the snapshot timestamp.
-- [ ] Run the generator twice and `diff` the two outputs — expect zero differences.
-- [ ] Simulate missing input: `mv laudo-details/introspection.json /tmp/` → `npm run laudo-details:generate` → expect the pt-BR abort message and no change to `map.md`. Restore the file.
-- [ ] Simulate malformed input: append garbage to `introspection.json`, run, expect abort + preserved `map.md`. Restore.
-- [ ] Simulate schema version bump: edit `schemaVersion` to `"999"` in the snapshot, run, expect abort. Restore.
-- [ ] Verify total length against the soft limit: `wc -c laudo-details/map.md`. If > 20,000, confirm the warning line is present in the summary and trim descriptions as needed.
-- [ ] Refine any column or neighbor description where the Markdown reads awkwardly; re-run to confirm deterministic output.
+- [x] Run `npm run laudo-details:introspect` first (prerequisite — produces `laudo-details/introspection.json`).
+- [x] Run `npm run laudo-details:generate` and open `laudo-details/map.md`.
+- [x] Visually verify each section:
+  - [x] Title matches `# Mapa da tabela [projects].[LaudoDetails]`.
+  - [x] Metadados table is populated.
+  - [x] "Avisos de tipo" section lists the 11 expected columns (see `typeTraps` above).
+  - [x] Columns section shows 19 rows in `ordinalPosition` order, with descriptions from `wording.ts`.
+  - [x] Relationships section has rows for `ProposalId` and `SentDocumentId` (origin depends on catalog presence).
+  - [x] Reverse references section populated according to snapshot.
+  - [x] Value-match table or empty-state rendered depending on snapshot content.
+  - [x] Neighbor summaries show abbreviated row counts.
+  - [x] Footer references `GENERATOR_VERSION` and the snapshot timestamp.
+- [x] Run the generator twice and `diff` the two outputs — expect zero differences.
+- [x] Simulate missing input: `mv laudo-details/introspection.json /tmp/` → `npm run laudo-details:generate` → expect the pt-BR abort message and no change to `map.md`. Restore the file.
+- [x] Simulate malformed input: append garbage to `introspection.json`, run, expect abort + preserved `map.md`. Restore.
+- [x] Simulate schema version bump: edit `schemaVersion` to `"999"` in the snapshot, run, expect abort. Restore.
+- [x] Verify total length against the soft limit: `wc -c laudo-details/map.md`. If > 20,000, confirm the warning line is present in the summary and trim descriptions as needed.
+- [x] Refine any column or neighbor description where the Markdown reads awkwardly; re-run to confirm deterministic output.
 - [ ] Commit `map.md` + `wording.ts` + the new rendering modules in a single PR.
 
 ## Files Affected (summary)
